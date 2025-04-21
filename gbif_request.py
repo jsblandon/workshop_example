@@ -1,4 +1,5 @@
 import requests
+import pandas as pd
 
 def get_gbif_species_data(species_name, country_code="UY"):
     """
@@ -21,11 +22,23 @@ def get_gbif_species_data(species_name, country_code="UY"):
     else:
         raise Exception(f"Failed to fetch data: {response.status_code} - {response.text}")
 
+def print_data_as_dataframe(data):
+    """
+    Convert GBIF species data to a pandas DataFrame and print it.
+
+    :param data: JSON response with species data.
+    """
+    if "results" in data:
+        df = pd.DataFrame(data["results"])
+        print(df)
+    else:
+        print("No results found in the data.")
+
 # Example usage
 if __name__ == "__main__":
     species = "Puma concolor"  # Replace with the desired species name
     try:
         data = get_gbif_species_data(species)
-        print(data)
+        print_data_as_dataframe(data)
     except Exception as e:
         print(f"Error: {e}")
